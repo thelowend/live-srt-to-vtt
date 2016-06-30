@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>Video SRT Test</title>
+		<title>Live SRT to VTT</title>
 	</head>
 	<body>
 		<video id="video" controls>
 		<source src="http://corrupt-system.de/assets/media/sintel/sintel-trailer.m4v" type="video/mp4">
-			<!--track label="English" kind="captions" srclang="en" src="test.vtt" default-->
-			<track label="English 2" kind="captions" srclang="en" src="test.srt" default>
+			<!--track label="English" kind="captions" srclang="en" src="subs/test.vtt" default-->
+			<track label="English 2" kind="captions" srclang="en" src="subs/test.srt" default>
 		</video>
 	</body>
 	<script>
@@ -57,6 +57,8 @@
 			xmlhttp.send();
 		};
 
+
+		//INIT
 		for (var i = 0; i < subs.length; i++) {
 			var src = subs[i].src,
 				type = src.substring(src.lastIndexOf('.') + 1);
