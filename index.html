@@ -6,8 +6,10 @@
 	<body>
 		<video id="video" controls>
 		<source src="http://corrupt-system.de/assets/media/sintel/sintel-trailer.m4v" type="video/mp4">
-			<!--track label="English" kind="captions" srclang="en" src="subs/test.vtt" default-->
-			<track label="English 2" kind="captions" srclang="en" src="subs/test.srt" default>
+			<track label="VTT 1" kind="subtitles" src="subs/test.vtt">
+			<track label="SRT 1" kind="subtitles" src="subs/test.srt" default>
+			<track label="VTT 2" kind="subtitles" src="subs/test2.vtt">
+			<track label="SRT 2" kind="subtitles" src="subs/test2.srt">
 		</video>
 	</body>
 	<script>
@@ -19,44 +21,19 @@
 	  	}
 
 		var convertSub = function (file, idx) {
-			var xmlhttp = new XMLHttpRequest({mozSystem: true});
+			var xmlhttp = new XMLHttpRequest();
 			var reader = new FileReader();
 
 			xmlhttp.onreadystatechange = function() {
-			  
 			  if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {    
-			    
-			    var newSubs = SRTtoVTT(xmlhttp.responseText);
-			    var blob = new Blob([newSubs], {type : 'text/webvtt'});
-			    var track = document.createElement('track'); 
-
-			    subs[idx].remove();
-				
-				track.kind = 'captions';
-				track.label = 'srt to vtt';
-				track.srclang = 'en';
-				
-				track.addEventListener('load', function() {
-			    	this.mode = 'showing';
-			    	vid.textTracks[idx].mode = 'showing'; // thanks Firefox
-				});
-
-				vid.appendChild(track);
-			    
-			    reader.onload = function (event) {
-					track.src = event.target.result;
-				};
-
-			    reader.readAsDataURL(blob);
-
+			    var blob = new Blob([SRTtoVTT(xmlhttp.responseText)], {type : 'text/vtt'});
+				subs[idx].src = URL.createObjectURL(blob);
 			  }
 			
 			}
-			
 			xmlhttp.open('GET', file, true);
 			xmlhttp.send();
 		};
-
 
 		//INIT
 		for (var i = 0; i < subs.length; i++) {
